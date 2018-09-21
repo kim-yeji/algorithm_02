@@ -6,7 +6,7 @@ public class Main {
 		FileReading fs = new FileReading();
 		
 		Sorting sort = new Sorting();
-		
+		System.out.println("hello world");
 	}
 
 }
