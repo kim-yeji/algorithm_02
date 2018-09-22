@@ -6,15 +6,24 @@ import java.io.IOException;
 
 
 public class FileReading {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("D:/algorithm/Al_02/test_100.txt"));
+	
+    public static DoublyLinkedList readFileForList(String cnt) throws IOException {
+        DoublyLinkedList list = new DoublyLinkedList();
+		BufferedReader br = new BufferedReader(new FileReader("E:\\yac_work\\_data\\test_"+cnt+".txt"));
+		
+		int i = 0;
         while(true) {
             String line = br.readLine();
-            if (line==null) break;
-            //System.out.println(line);
+            if (line==null) {
+            	break;
+            } else {
+                list.add(i, Integer.parseInt(line));
+            }
+            i++;
         }
-      
-       
+        
         br.close();
+        
+        return list;
     }
 }

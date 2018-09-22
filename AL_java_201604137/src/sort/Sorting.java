@@ -2,19 +2,6 @@ package sort;
 
 public class Sorting {
 
-	public void insertionSort(int[] data) {
-		for (int index = 1; index < data.length; index++) {
-			int temp = data[index];
-			int aux = index - 1;
-
-			while ((aux >= 0) && (data[aux] > temp)) {
-				data[aux + 1] = data[aux];
-				aux--;
-			}
-			data[aux + 1] = temp;
-		}
-	}
-
 	public void bubbleSort(int[] arr) {
 		int size = arr.length;
 		int temp = 0;
@@ -26,6 +13,19 @@ public class Sorting {
 					arr[j] = temp;
 				}
 			}
+		}
+	}
+
+	public void insertionSort(int[] data) {
+		for (int index = 1; index < data.length; index++) {
+			int temp = data[index];
+			int aux = index - 1;
+
+			while ((aux >= 0) && (data[aux] > temp)) {
+				data[aux + 1] = data[aux];
+				aux--;
+			}
+			data[aux + 1] = temp;
 		}
 	}
 

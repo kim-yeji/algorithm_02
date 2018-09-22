@@ -1,173 +1,366 @@
 package sort;
-
 public class DoublyLinkedList {
-    
-    private Node header;
-    private int size;
-    public DoublyLinkedList(){
-        header = new Node(null);
-        size=0;
-    }
-    
-    
-    private  class Node{
-        
+    // 첫번째 노드를 가리키는 필드
+    private Node head;
+    private Node tail;
+    private int size = 0;
+ 
+    private class Node {
+        // 데이터가 저장될 필드
         private Object data;
-        private Node previousNode;
-        private Node nextNode;
-        
-        Node(Object data){
-            
-            this.data = data;
-            this.previousNode = null;
-            this.nextNode = null;
-            
+        // 다음 노드를 가리키는 필드
+        private Node next;
+        private Node prev;
+ 
+        public Node(Object input) {
+            this.data = input;
+            this.next = null;
+            this.prev = null;
+        }
+ 
+        // 노드의 내용을 쉽게 출력해서 확인해볼 수 있는 기능
+        public String toString() {
+            return String.valueOf(this.data);
         }
     }
-    
-    // index위치에서 얻은 노드의 데이터를 반환한다.
-    public Object get(int index){
-        return getNode(index).data;
-    }
-    
-    // 첫번째 노드를 반환한다.
-    public Object getFirst(){
-        return get(0);
-    }
-
-    
-    private Node getNode(int index){
-        
-        if(index < 0 || index > size){
-            throw new IndexOutOfBoundsException("Index : "+index+", Size : " + size);
+ 
+    public void addFirst(Object input) {
+        // 노드를 생성합니다.
+        Node newNode = new Node(input);
+        // 새로운 노드의 다음 노드로 헤드를 지정합니다.
+        newNode.next = head;
+        // 기존에 노드가 있었다면 현재 헤드의 이전 노드로 새로운 노드를 지정합니다.
+        if (head != null)
+            head.prev = newNode;
+        // 헤드로 새로운 노드를 지정합니다.
+        head = newNode;
+        size++;
+        if (head.next == null) {
+            tail = head;
         }
-        
-        Node node = header;
-        
-        // index 가 리스트 size의 중간 앞이면 순차적으로 탐색한다.
-        if(index < (size/2)){
-            
-            for(int i =0; i<=index; i++){
-                node = node.nextNode;
+    }
+ 
+    public void addLast(Object input) {
+        // 노드를 생성합니다.
+        Node newNode = new Node(input);
+        // 리스트의 노드가 없다면 첫번째 노드를 추가하는 메소드를 사용합니다.
+        if (size == 0) {
+            addFirst(input);
+        } else {
+            // tail의 다음 노드로 생성한 노드를 지정합니다.
+            tail.next = newNode;
+            // 새로운 노드의 이전 노드로 tail을 지정합니다.
+            newNode.prev = tail;
+            // 마지막 노드를 갱신합니다.
+            tail = newNode;
+            // 엘리먼트의 개수를 1 증가 시킵니다.
+            size++;
+        }
+    }
+ 
+    Node getNode(int index) {
+        // 노드의 인덱스가 전체 노드 수의 반보다 큰지 작은지 계산
+        if (index < size / 2) {
+            // head부터 next를 이용해서 인덱스에 해당하는 노드를 찾습니다.
+            Node x = head;
+            for (int i = 0; i < index; i++)
+                x = x.next;
+            return x;
+        } else {
+            // tail부터 prev를 이용해서 인덱스에 해당하는 노드를 찾습니다.
+            Node x = tail;
+            for (int i = size - 1; i > index; i--)
+                x = x.prev;
+            return x;
+        }
+    }
+ 
+    public void add(int k, Object input) {
+        // 만약 k가 0이라면 첫번째 노드에 추가하는 것이기 때문에 addFirst를 사용합니다.
+        if (k == 0) {
+            addFirst(input);
+        } else {
+            Node temp1 = getNode(k - 1);
+            // k 번째 노드를 temp2로 지정합니다.
+            Node temp2 = temp1.next;
+            // 새로운 노드를 생성합니다.
+            Node newNode = new Node(input);
+            // temp1의 다음 노드로 새로운 노드를 지정합니다.
+            temp1.next = newNode;
+            // 새로운 노드의 다음 노드로 temp2를 지정합니다.
+            newNode.next = temp2;
+            // temp2의 이전 노드로 새로운 노드를 지정합니다.
+            if (temp2 != null)
+                temp2.prev = newNode;
+            // 새로운 노드의 이전 노드로 temp1을 지정합니다.
+            newNode.prev = temp1;
+            size++;
+            // 새로운 노드의 다음 노드가 없다면 새로운 노드가 마지막 노드이기 때문에 tail로 지정합니다.
+            if (newNode.next == null) {
+                tail = newNode;
             }
-            
-        }else{
-            // index가 리스트 size의 중간보다 뒤면 뒤에서부터 탐색한다.
-            for(int i = size; i > index; i--){
-                node = node.previousNode;
-        
-            }
         }
-        
-        return node;
     }
-    
-    // obj 데이터와 같은 노드의 위치를 반환한다.
-    private int getNodeIndex(Object obj){
-        
-        if(size<=0){
-            return -1;
+ 
+    public void printNode() {
+        // 노드가 없다면 []를 리턴합니다.
+        if (head == null) {
+            System.out.println("no data");
         }
-        
-        int index =0;
-        // 첫번째 노드를 가져온다.
-        Node node = header.nextNode;
-        Object nodeDate = node.data;
-        
-        // 첫번째 노드부터 같은 데이터를 가진 노드를 탐색한다.
-        while(!obj.equals(nodeDate)){
-            
-            node = node.nextNode;
-            
-            if(node==null){
-                return -1;
-            }
-            
-            nodeDate = node.data;
+        // 탐색을 시작합니다.
+        Node temp = head;
+        // 다음 노드가 없을 때까지 반복문을 실행합니다.
+        // 마지막 노드는 다음 노드가 없기 때문에 아래의 구문은 마지막 노드는 제외됩니다.
+        int i = 1;
+        while (temp.next != null) {
+            System.out.println(i+".\t"+temp.data);
+            temp = temp.next;
+            i++;
+        }
+        // 마지막 노드를 출력결과에 포함시킵니다.
+        System.out.println(i+".\t"+temp.data);
+    }
+ 
+    public Object removeFirst() {
+        // 첫번째 노드를 temp로 지정하고 head의 값을 두번째 노드로 변경합니다.
+        Node temp = head;
+        head = temp.next;
+        // 데이터를 삭제하기 전에 리턴할 값을 임시 변수에 담습니다.
+        Object returnData = temp.data;
+        temp = null;
+        // 리스트 내에 노드가 있다면 head의 이전 노드를 null로 지정합니다.
+        if (head != null)
+            head.prev = null;
+        size--;
+        return returnData;
+    }
+ 
+    public Object remove(int k) {
+        if (k == 0)
+            return removeFirst();
+        // k-1번째 노드를 temp로 지정합니다.
+        Node temp = getNode(k - 1);
+        // temp.next를 삭제하기 전에 todoDeleted 변수에 보관합니다.
+        Node todoDeleted = temp.next;
+        // 삭제 대상 노드를 연결에서 분리합니다.
+        temp.next = temp.next.next;
+        if (temp.next != null) {
+            // 삭제할 노드의 전후 노드를 연결합니다.
+            temp.next.prev = temp;
+        }
+        // 삭제된 노드의 데이터를 리턴하기 위해서 returnData에 데이터를 저장합니다.
+        Object returnData = todoDeleted.data;
+        // 삭제된 노드가 tail이었다면 tail을 이전 노드를 tail로 지정합니다.
+        if (todoDeleted == tail) {
+            tail = temp;
+        }
+        // cur.next를 삭제 합니다.
+        todoDeleted = null;
+        size--;
+        return returnData;
+    }
+ 
+    public Object removeLast() {
+        return remove(size - 1);
+    }
+ 
+    public int size() {
+        return size;
+    }
+ 
+    public Object get(int k) {
+        Node temp = getNode(k);
+        return temp.data;
+    }
+ 
+    public int indexOf(Object data) {
+        // 탐색 대상이 되는 노드를 temp로 지정합니다.
+        Node temp = head;
+        // 탐색 대상이 몇번째 엘리먼트에 있는지를 의미하는 변수로 index를 사용합니다.
+        int index = 0;
+        // 탐색 값과 탐색 대상의 값을 비교합니다.
+        while (temp.data != data) {
+            temp = temp.next;
             index++;
+            // temp의 값이 null이라는 것은 더 이상 탐색 대상이 없다는 것을 의미합니다.이 때 -1을 리턴합니다.
+            if (temp == null)
+                return -1;
         }
-        
-        // 위치를 반환한다.
+        // 탐색 대상을 찾았다면 대상의 인덱스 값을 리턴합니다.
         return index;
     }
-    
-    // 리스트의 첫번째에 데이터를 삽입한다.
-    public void addFirst(Object data){
-        
-        // 데이터를 담은 새로운 노드 생성
-        Node newNode = new Node(data);    
-        
-        // 새로운 노드가 다음 노드로 첫번째 노드를 가리킨다.
-        newNode.nextNode = header.nextNode;    
-        
-        // 리스트가 비어있지 않으면
-        if(header.nextNode != null){
-            
-            // 첫 노드가 자신의 앞 노드로 새로운 노드를 가리킨다..
-            header.nextNode.previousNode = newNode;
-        
-        }else{    // 리스트가 비어있으면
-            
-            // 헤더가 마지막 노드를 새로운 노드로 가리키도록 한다.
-            header.previousNode = newNode;
-        
+ 
+    // 반복자를 생성해서 리턴해줍니다.
+    public ListIterator listIterator() {
+        return new ListIterator();
+    }
+ 
+    public class ListIterator {
+        private Node lastReturned;
+        private Node next;
+        private int nextIndex;
+ 
+        ListIterator() {
+            next = head;
+            nextIndex = 0;
         }
-        
-        // 헤더가 첫번째 노드로 새로운 노드를 가리키도록 한다.
-        header.nextNode = newNode;
-        size++;
-    }
-    
-    public void add(int index, Object data){
-        
-        // index가 0 이면 addFirst() 함수를 호출한다.
-        if(index ==0){
-            
-            addFirst(data);
-            return;
+ 
+        // 본 메소드를 호출하면 cursor의 참조값이 기존 cursor.next로 변경됩니다.
+        public Object next() {
+            lastReturned = next;
+            next = next.next;
+            nextIndex++;
+            return lastReturned.data;
         }
-        
-        // 삽입할 index 위치의 앞 노드를 가져온다.
-        Node previous = getNode(index-1);
-        
-        // 삽입할 index의 위치의 다음 노드를 가져온다.
-        Node next = previous.nextNode;
-        
-        // data로 새로운 노드 생성
-        Node newNode = new Node(data);
-        
-        // 앞노드가 새로운 노드를 다음노드로 가리킨다.
-        previous.nextNode = newNode;
-        
-        // 새로운 노드가 앞노드를 이전노드로 가리킨다.
-        newNode.previousNode = previous;
-        
-        //새로운 노드의 다음 노드에 다음노드를 지정한다.
-        newNode.nextNode = next;
-        
-        // 삽입 위치가 마지막 위치가 아니면
-        if(newNode.nextNode != null){
-            
-            // 다음 노드가 새로운 노드를 앞노드로 지정한다.
-            next.previousNode = newNode;
-        
-        }else{ // 삽입 위치가 마지막 이면
-            
-            // 헤더가 가리키는 마지막 노드가 새로운 노드가 된다..
-            header.previousNode = newNode;
+ 
+        // cursor의 값이 없다면 다시 말해서 더 이상 next를 통해서 가져올 노드가 없다면 false를 리턴합니다.
+        // 이를 통해서 next를 호출해도 되는지를 사전에 판단할 수 있습니다.
+        public boolean hasNext() {
+            return nextIndex < size();
         }
-        
-        size++;
+ 
+        public boolean hasPrevious() {
+            return nextIndex > 0;
+        }
+ 
+        public Object previous() {
+            if (next == null) {
+                lastReturned = next = tail;
+            } else {
+                lastReturned = next = next.prev;
+            }
+            nextIndex--;
+            return lastReturned.data;
+        }
+ 
+        public void add(Object input) {
+            Node newNode = new Node(input);
+            if (lastReturned == null) {
+                head = newNode;
+                newNode.next = next;
+            } else {
+                lastReturned.next = newNode;
+                newNode.prev = lastReturned;
+                if (next != null) {
+                    newNode.next = next;
+                    next.prev = newNode;
+                } else {
+                    tail = newNode;
+                }
+            }
+            lastReturned = newNode;
+            nextIndex++;
+            size++;
+        }
+ 
+        public void remove() {
+            if (nextIndex == 0) {
+                throw new IllegalStateException();
+            }
+            Node n = lastReturned.next;
+            Node p = lastReturned.prev;
+ 
+            if (p == null) {
+                head = n;
+                head.prev = null;
+                lastReturned = null;
+            } else {
+                p.next = next;
+                lastReturned.prev = null;
+            }
+ 
+            if (n == null) {
+                tail = p;
+                tail.next = null;
+            } else {
+                n.prev = p;
+            }
+ 
+            if (next == null) {
+                lastReturned = tail;
+            } else {
+                lastReturned = next.prev;
+            }
+ 
+            size--;
+            nextIndex--;
+ 
+        }
     }
     
-    // 마지막 노드를 반환한다.
-    public void addLast(Object data){
-        add(size, data);
+    public void bubbleSort(){
+    	long start = System.currentTimeMillis();
+    	
+    	Node temp = null;
+		for (int i = 0; i < size; i++) {
+			for (int j = 1; j < size - i; j++) {
+				if ((int)getNode(j - 1).data > (int)getNode(j).data) {
+					temp = getNode(j);
+					remove(j);
+					add(j-1, temp.data);
+				}
+			}
+			
+			if(i%100 == 0){
+				System.out.println("b: "+i);
+			}
+		}
+		
+		long end = System.currentTimeMillis();
+		System.out.println("버블정렬 측정시간: "+(end-start)/1000.0);
     }
     
-    //data를 마지막에 넣는다.
-    public void add(Object data){
-        addLast(data);
-    }
+    public void insertionSort(){
+    	long start = System.currentTimeMillis();
+    	
+    	for (int i = 1; i < size; i++) {
+			int temp = (int)getNode(i).data;
+			int aux = i - 1;
 
+			while ((aux >= 0) && ((int)getNode(aux).data > temp)) {
+				remove(aux + 1);
+				add(aux + 1, getNode(aux).data);
+				aux--;
+			}
+			remove(aux + 1);
+			add(aux + 1, temp);
+
+			if(i%100 == 0){
+				System.out.println("i: "+i);
+			}
+		}
+    	
+		long end = System.currentTimeMillis();
+		System.out.println("삽입정렬 측정시간: "+(end-start)/1000.0);
+    }
+    
+    public void selectionSort(){
+    	long start = System.currentTimeMillis();
+    	
+		int minIdx; // 최소값을 가진 데이터의 인덱스 저장 변수
+		int temp;
+
+		for (int i = 0; i < size - 1; i++) { // size-1 : 마지막 요소는 자연스럽게 정렬됨
+			minIdx = i;
+			for (int j = i + 1; j < size; j++) { 
+				if ((int)getNode(minIdx).data > (int)getNode(j).data) {
+					minIdx = j;
+				}
+			}
+			temp = (int)getNode(minIdx).data;
+			remove(minIdx);
+			add(minIdx, getNode(i).data);
+			
+			remove(i);
+			add(i, temp);
+
+			if(i%100 == 0){
+				System.out.println("s: "+i);
+			}
+		}
+		
+		long end = System.currentTimeMillis();
+		System.out.println("선택정렬 측정시간: "+(end-start)/1000.0);
+    }
+ 
 }
