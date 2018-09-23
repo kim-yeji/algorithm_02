@@ -13,9 +13,10 @@ public class Main {
         System.out.println("============== "+cnt+"개 테스트 ===============");
     	
 		list = FileReading.readFileForList(cnt);
-
         list.bubbleSort();
+		list = FileReading.readFileForList(cnt);
         list.insertionSort();
+		list = FileReading.readFileForList(cnt);
         list.selectionSort();
         
 
@@ -23,9 +24,10 @@ public class Main {
         System.out.println("============== "+cnt+"개 테스트 ===============");
     	
 		list = FileReading.readFileForList(cnt);
-
         list.bubbleSort();
+		list = FileReading.readFileForList(cnt);
         list.insertionSort();
+		list = FileReading.readFileForList(cnt);
         list.selectionSort();
 
         
@@ -33,9 +35,10 @@ public class Main {
         System.out.println("============== "+cnt+"개 테스트 ===============");
     	
 		list = FileReading.readFileForList(cnt);
-
         list.bubbleSort();
+		list = FileReading.readFileForList(cnt);
         list.insertionSort();
+		list = FileReading.readFileForList(cnt);
         list.selectionSort();
 		
 	}

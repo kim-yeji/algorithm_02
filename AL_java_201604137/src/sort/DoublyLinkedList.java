@@ -301,9 +301,6 @@ public class DoublyLinkedList {
 				}
 			}
 			
-			if(i%100 == 0){
-				System.out.println("b: "+i);
-			}
 		}
 		
 		long end = System.currentTimeMillis();
@@ -325,9 +322,9 @@ public class DoublyLinkedList {
 			remove(aux + 1);
 			add(aux + 1, temp);
 
-			if(i%100 == 0){
-				System.out.println("i: "+i);
-			}
+//			if(i%100 == 0){
+//				System.out.println("i: "+i);
+//			}
 		}
     	
 		long end = System.currentTimeMillis();
@@ -354,9 +351,6 @@ public class DoublyLinkedList {
 			remove(i);
 			add(i, temp);
 
-			if(i%100 == 0){
-				System.out.println("s: "+i);
-			}
 		}
 		
 		long end = System.currentTimeMillis();
