@@ -9,7 +9,7 @@ public class FileReading {
 	
     public static DoublyLinkedList readFileForList(String cnt) throws IOException {
         DoublyLinkedList list = new DoublyLinkedList();
-		BufferedReader br = new BufferedReader(new FileReader("E:\\yac_work\\_data\\test_"+cnt+".txt"));
+		BufferedReader br = new BufferedReader(new FileReader("C:/Users/isaac153/Desktop/Al_02/"+cnt+".txt"));
 		
 		int i = 0;
         while(true) {
